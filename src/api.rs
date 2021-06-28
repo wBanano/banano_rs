@@ -1,3 +1,5 @@
+//! Banano API
+
 use crate::types::{Address, Amount};
 use reqwest::Client;
 use serde::Deserialize;
@@ -10,11 +12,33 @@ pub enum BananoError {
     RpcError(#[from] reqwest::Error),
 }
 
+/// Banano API
+///
+/// # Example:
+/// ```
+/// use banano_rs::{
+///   api::{Banano, BananoError},
+///   types::Address 
+/// };
+///
+/// #[tokio::main]
+/// async fn main() {
+///     let banano = Banano::new("https://kaliumapi.appditto.com/api".into());
+///     let address = Address("ban_1hgtqu7cmgxb66ta4gxt7coimqcxp86nzi5b7u14ip9zzpqr16a3dbqdja1f".into());
+///     let account_balance = banano.account_balance(&address).await.unwrap();
+/// }
+/// ```
 pub struct Banano {
     rpc_api: String,
 }
 
 impl Banano {
+    /// Instanciate Banano API using a RPC API URL
+    ///
+    /// # Example:
+    /// ```
+    /// let banano = banano_rs::api::Banano::new("https://kaliumapi.appditto.com/api".into());
+    /// ```
     pub fn new(rpc_api: String) -> Self {
         Banano {
             rpc_api: rpc_api,
@@ -35,9 +59,14 @@ impl Banano {
     }
 }
 
+/// Account balance
+///
+/// [Nano documentation](https://docs.nano.org/commands/rpc-protocol/#account_balance)
 #[derive(Debug, Deserialize)]
 pub struct AccountBalance {
+    /// Balance amount
     balance: Amount,
+    /// Pending amount
     pending: Amount,
 }
 
@@ -59,7 +88,7 @@ mod tests {
         let address = Address("ban_1hgtqu7cmgxb66ta4gxt7coimqcxp86nzi5b7u14ip9zzpqr16a3dbqdja1f".into());
         let account_balance = aw!(banano.account_balance(&address)).unwrap();
         assert_eq!(Amount("9900000000000000000000000000000".into()), account_balance.balance);
-        assert_eq!(Decimal::from_str_radix("99".into(), 10).unwrap(), account_balance.balance.to_decimal());
+        assert_eq!(Decimal::from_str_radix("99".into(), 10).unwrap(), account_balance.balance.as_banano());
         assert_eq!(Amount("0".into()), account_balance.pending);
     }
     

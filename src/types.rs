@@ -7,12 +7,27 @@ use rust_decimal::Decimal;
 #[derive(Debug, Clone, PartialEq)]
 pub struct Address(pub String);
 
-/// Amount
 #[derive(Debug, Clone, Deserialize, PartialEq)]
+/// Amount
+///
+/// `Amount` is by default a [String](String) having the raw value.
+///
+/// # Example:
+/// ```
+/// let amount = banano_rs::types::Amount("9900000000000000000000000000000".into());
+/// ```
+///
 pub struct Amount(pub String);
 
 impl Amount {
-    pub fn to_decimal(&self) -> Decimal {
+    /// Return the amount as a [Decimal](Decimal), ignoring raw.
+    ///
+    /// # Example:
+    /// ```
+    /// let amount_raw = banano_rs::types::Amount("9900000000000000000000000000000".into());
+    /// let bananos = amount_raw.as_banano();
+    /// ```
+    pub fn as_banano(&self) -> Decimal {
         if self.0 == "0" {
             return Decimal::from(0)
         }
