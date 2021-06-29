@@ -3,14 +3,14 @@
 //! # Example:
 //! ```
 //! use banano_rs::{
-//!   api::Banano,
-//!   errors::BananoError,
-//!   types::Address 
+//!   BananoApi,
+//!   BananoError,
+//!   Address 
 //! };
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let banano = Banano::new("https://kaliumapi.appditto.com/api".into());
+//!     let banano = BananoApi::new("https://kaliumapi.appditto.com/api".into());
 //!     let address = Address("ban_1hgtqu7cmgxb66ta4gxt7coimqcxp86nzi5b7u14ip9zzpqr16a3dbqdja1f".into());
 //!     let account_balance = banano.account_balance(&address).await.unwrap();
 //! }
@@ -24,19 +24,19 @@ use serde_json::json;
 mod account;
 
 /// Banano API
-pub struct Banano {
+pub struct BananoApi {
     rpc_api: String,
 }
 
-impl Banano {
+impl BananoApi {
     /// Instanciate Banano API using a RPC API URL
     ///
     /// # Example:
     /// ```
-    /// let banano = banano_rs::api::Banano::new("https://kaliumapi.appditto.com/api".into());
+    /// let banano = banano_rs::BananoApi::new("https://kaliumapi.appditto.com/api".into());
     /// ```
     pub fn new(rpc_api: String) -> Self {
-        Banano {
+        BananoApi {
             rpc_api: rpc_api,
         }
     }
@@ -72,8 +72,8 @@ impl Banano {
 
 #[cfg(test)]
 mod tests {
-    use crate::types::Amount;
-    use rust_decimal::Decimal;
+    use crate::Raw;
+    use crate::units::Banano;
     use super::*;
 
     macro_rules! aw {
@@ -84,17 +84,20 @@ mod tests {
 
     #[test]
     fn account_balance() {
-        let banano = Banano::new("https://kaliumapi.appditto.com/api".into());
+        let banano = BananoApi::new("https://kaliumapi.appditto.com/api".into());
         let address = Address("ban_1hgtqu7cmgxb66ta4gxt7coimqcxp86nzi5b7u14ip9zzpqr16a3dbqdja1f".into());
         let account_balance = aw!(banano.account_balance(&address)).unwrap();
-        assert_eq!(Amount("9900000000000000000000000000000".into()), account_balance.balance);
-        assert_eq!(Decimal::from_str_radix("99".into(), 10).unwrap(), account_balance.balance.as_banano());
-        assert_eq!(Amount("0".into()), account_balance.pending);
+
+        let expected_balance = Banano::new(99).to_raw().unwrap();
+        let expected_pending = Raw::zero();
+        println!("Expected: {}, Got: {}", expected_balance, account_balance.balance);
+        assert!(account_balance.balance.eq(&expected_balance));
+        assert!(account_balance.pending.eq(&expected_pending));
     }
 
     #[test]
     fn account_block_count() {
-        let banano = Banano::new("https://kaliumapi.appditto.com/api".into());
+        let banano = BananoApi::new("https://kaliumapi.appditto.com/api".into());
         let address = Address("ban_1hgtqu7cmgxb66ta4gxt7coimqcxp86nzi5b7u14ip9zzpqr16a3dbqdja1f".into());
         let account_block = aw!(banano.account_block_count(&address)).unwrap();
         assert_eq!(4, account_block.block_count);

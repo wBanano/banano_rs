@@ -1,6 +1,5 @@
-use crate::types::Amount;
+use crate::units::Raw;
 use serde::Deserialize;
-use serde_aux::prelude::*;
 
 type BlockCount = u128;
 
@@ -10,9 +9,9 @@ type BlockCount = u128;
 #[derive(Debug, Deserialize)]
 pub struct AccountBalance {
     /// Balance amount
-    pub balance: Amount,
+    pub balance: Raw,
     /// Pending amount
-    pub pending: Amount,
+    pub pending: Raw,
 }
 
 /// Account block count
@@ -20,6 +19,6 @@ pub struct AccountBalance {
 /// [Nano documentation](https://docs.nano.org/commands/rpc-protocol/#account_block_count)
 #[derive(Debug, Deserialize)]
 pub struct AccountBlockCount {
-    #[serde(deserialize_with = "deserialize_number_from_string")]
+    #[serde(with = "serde_with::rust::display_fromstr")]
     pub block_count: BlockCount,
 }

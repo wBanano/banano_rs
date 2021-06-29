@@ -1,5 +1,12 @@
 //! Banano Client Library
 
-pub mod errors;
+mod errors;
 pub mod types;
+pub mod units;
+pub mod encoding;
 pub mod api;
+
+pub use api::BananoApi;
+pub use errors::{BananoError, Result};
+pub use units::raw::Raw;
+pub use types::Address;

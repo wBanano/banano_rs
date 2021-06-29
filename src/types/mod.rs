@@ -10,14 +10,12 @@ pub use self::seed::Seed;
 pub use self::address::Address;
 pub use self::privkey::PrivateKey;
 pub use self::account::Account;
-pub use self::amount::Amount;
 
 mod seed;
 mod address;
 mod privkey;
 mod pubkey;
 mod account;
-mod amount;
 
 const BAN_ENCODING: Encoding = new_encoding! {
 	symbols: "13456789abcdefghijkmnopqrstuwxyz",
