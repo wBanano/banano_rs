@@ -1,13 +1,6 @@
-//! Banano Types
-
 use serde::Deserialize;
 use rust_decimal::Decimal;
 
-/// Address
-#[derive(Debug, Clone, PartialEq)]
-pub struct Address(pub String);
-
-#[derive(Debug, Clone, Deserialize, PartialEq)]
 /// Amount
 ///
 /// `Amount` is by default a [String](String) having the raw value.
@@ -17,6 +10,7 @@ pub struct Address(pub String);
 /// let amount = banano_rs::types::Amount("9900000000000000000000000000000".into());
 /// ```
 ///
+#[derive(Debug, Clone, Deserialize, PartialEq)]
 pub struct Amount(pub String);
 
 impl Amount {
