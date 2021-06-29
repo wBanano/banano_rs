@@ -17,12 +17,13 @@
 //! ```
 
 use crate::types::{Address};
-use self::account::*;
+pub use self::account::*;
 use reqwest::Client;
 use serde_json::json;
 
-pub mod account;
+mod account;
 
+/// Banano API
 pub struct Banano {
     rpc_api: String,
 }
@@ -89,5 +90,13 @@ mod tests {
         assert_eq!(Amount("9900000000000000000000000000000".into()), account_balance.balance);
         assert_eq!(Decimal::from_str_radix("99".into(), 10).unwrap(), account_balance.balance.as_banano());
         assert_eq!(Amount("0".into()), account_balance.pending);
+    }
+
+    #[test]
+    fn account_block_count() {
+        let banano = Banano::new("https://kaliumapi.appditto.com/api".into());
+        let address = Address("ban_1hgtqu7cmgxb66ta4gxt7coimqcxp86nzi5b7u14ip9zzpqr16a3dbqdja1f".into());
+        let account_block = aw!(banano.account_block_count(&address)).unwrap();
+        assert_eq!(4, account_block.block_count);
     }
 }
