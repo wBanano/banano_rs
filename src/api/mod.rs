@@ -26,6 +26,7 @@ mod account;
 /// Banano API
 pub struct BananoApi {
     rpc_api: String,
+    client: Client,
 }
 
 impl BananoApi {
@@ -38,6 +39,7 @@ impl BananoApi {
     pub fn new(rpc_api: String) -> Self {
         BananoApi {
             rpc_api: rpc_api,
+            client: Client::new(),
         }
     }
 
@@ -47,7 +49,7 @@ impl BananoApi {
             "action": "account_balance",
             "account": account.0,
         });
-        let account_balance: AccountBalance = Client::new()
+        let account_balance: AccountBalance = self.client
             .post(self.rpc_api.clone())
             .json(&request)
             .send().await?
@@ -61,7 +63,7 @@ impl BananoApi {
             "action": "account_block_count",
             "account": account.0,
         });
-        let account_block: AccountBlockCount = Client::new()
+        let account_block: AccountBlockCount = self.client
             .post(self.rpc_api.clone())
             .json(&request)
             .send().await?
