@@ -4,7 +4,7 @@
 //! ```
 //! use banano_rs::{
 //!   BananoApi,
-//!   BananoError,
+//!   Error,
 //!   Address 
 //! };
 //!
@@ -44,7 +44,7 @@ impl BananoApi {
     }
 
     /// Returns how many RAW is owned and how many have not yet been received by `account`
-    pub async fn account_balance(&self, account: &Address) -> Result<AccountBalance, crate::errors::BananoError> {
+    pub async fn account_balance(&self, account: &Address) -> Result<AccountBalance, crate::errors::Error> {
         let request = json!({
             "action": "account_balance",
             "account": account.0,
@@ -58,7 +58,7 @@ impl BananoApi {
     }
 
     /// Get number of blocks for a specific `account`
-    pub async fn account_block_count(&self, account: &Address) -> Result<AccountBlockCount, crate::errors::BananoError> {
+    pub async fn account_block_count(&self, account: &Address) -> Result<AccountBlockCount, crate::errors::Error> {
         let request = json!({
             "action": "account_block_count",
             "account": account.0,

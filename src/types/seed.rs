@@ -1,4 +1,4 @@
-use crate::errors::BananoError;
+use crate::Error;
 use data_encoding::{HEXUPPER_PERMISSIVE};
 use std::ops::{Deref, DerefMut};
 
@@ -13,10 +13,10 @@ impl Seed {
     }
     */
 
-	pub fn from<T: AsRef<[u8]>>(seed: T) -> Result<Self, BananoError> {
+	pub fn from<T: AsRef<[u8]>>(seed: T) -> Result<Self, Error> {
 		let seed = seed.as_ref();
 		if seed.len() != 64 {
-			return Err(BananoError::SeedLengthError(seed.len()));
+			return Err(Error::SeedLengthError(seed.len()));
 		}
 
         println!("Original Seed (len={}): {:02X?}", seed.len(), seed);

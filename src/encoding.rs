@@ -1,4 +1,4 @@
-use crate::errors::BananoError;
+use crate::Error;
 use bitvec::prelude::*;
 use blake2::digest::{Update, VariableOutput};
 use blake2::VarBlake2b;
@@ -93,12 +93,12 @@ pub fn encode_banano_base_32(bits: &BitSlice<Msb0, u8>) -> String {
     s
 }
 
-pub fn decode_banano_base_32(s: &str) -> Result<BitVec<Msb0, u8>, BananoError> {
+pub fn decode_banano_base_32(s: &str) -> Result<BitVec<Msb0, u8>, Error> {
     let mut bits: BitVec<Msb0, u8> = BitVec::new(); // TODO: with_capacity
     for char in s.chars() {
         let value = ALPHABET
             .find(char) // TODO: performance
-            .ok_or_else(|| BananoError::DecodingError(char))?;
+            .ok_or_else(|| Error::DecodingError(char))?;
         let value = value as u8;
         let char_bits: &BitSlice<Msb0, u8> = value.view_bits();
         bits.extend_from_bitslice(&char_bits[(8 - ENCODING_BITS)..8]);
@@ -304,7 +304,7 @@ mod tests {
 
 pub fn expect_len(got_len: usize, expected_len: usize, msg: &str) -> crate::Result<()> {
     if got_len != expected_len {
-        return Err(crate::errors::BananoError::WrongLength {
+        return Err(crate::errors::Error::WrongLength {
             msg: msg.to_string(),
             expected: expected_len,
             found: got_len,

@@ -82,7 +82,7 @@
 //! ```
 pub(crate) mod raw;
 
-use crate::errors::BananoError;
+use crate::Error;
 use bigdecimal::BigDecimal;
 use bigdecimal::ToPrimitive;
 use doc_comment::doc_comment;
@@ -150,7 +150,7 @@ See the [module documentation](crate::units) for more information as this is gen
             /// # Ok(())
             /// # }
             /// ```
-            pub fn to_raw(&self) -> Result<Raw, BananoError> {
+            pub fn to_raw(&self) -> Result<Raw, Error> {
                 Raw::try_from(&self.to_raw_big_decimal())
             }
 
@@ -212,7 +212,7 @@ See the [module documentation](crate::units) for more information as this is gen
         }
 
         impl FromStr for $struct_name {
-            type Err = BananoError;
+            type Err = Error;
 
             fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
                 Ok(Self::new(BigDecimal::from_str(s)?))

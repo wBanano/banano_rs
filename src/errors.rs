@@ -2,10 +2,10 @@
 
 use thiserror::Error;
 
-pub type Result<T> = std::result::Result<T, BananoError>;
+pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Error, Debug)]
-pub enum BananoError {
+pub enum Error {
     #[error("Web3 provider error")]
     RpcError(#[from] reqwest::Error),
     #[error("Decoding error")]

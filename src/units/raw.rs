@@ -1,6 +1,6 @@
 use super::{Banano, Bananoshi, UnboundedRaw};
 use crate::encoding::{expect_len, to_hex};
-use crate::errors::BananoError;
+use crate::Error;
 use bigdecimal::BigDecimal;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 use std::cmp::Ordering;
@@ -35,9 +35,9 @@ impl Raw {
         Self(v.into())
     }
 
-    pub fn from_hex(s: &str) -> Result<Self, BananoError> {
+    pub fn from_hex(s: &str) -> Result<Self, Error> {
         expect_len(s.len(), Raw::LEN * 2, "Hex raw")?;
-        let vec = hex::decode(s.as_bytes()).map_err(|e| BananoError::FromHexError {
+        let vec = hex::decode(s.as_bytes()).map_err(|e| Error::FromHexError {
             msg: String::from("Decoding hex raw"),
             source: e,
         })?;
@@ -91,7 +91,7 @@ impl Raw {
 }
 
 impl FromStr for Raw {
-    type Err = BananoError;
+    type Err = Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(Self(u128::from_str(s)?))
@@ -150,7 +150,7 @@ impl From<u128> for Raw {
 }
 
 impl TryFrom<&[u8]> for Raw {
-    type Error = BananoError;
+    type Error = Error;
 
     fn try_from(value: &[u8]) -> Result<Self, Self::Error> {
         expect_len(value.len(), Self::LEN, "Raw")?;
@@ -162,7 +162,7 @@ impl TryFrom<&[u8]> for Raw {
 }
 
 impl TryFrom<&BigDecimal> for Raw {
-    type Error = BananoError;
+    type Error = Error;
 
     /// Convert from BigDecimal into Raw, removing any fraction.
     ///

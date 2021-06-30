@@ -1,4 +1,4 @@
-use crate::errors::BananoError;
+use crate::Error;
 use ed25519_dalek::{PublicKey};
 
 /// Address
@@ -7,7 +7,7 @@ pub struct Address(pub String);
 
 impl Address {
     /// Compute [PublicKey](PublicKey) from the Banano address
-    pub fn to_public_key(&self) -> Result<PublicKey, BananoError> {
+    pub fn to_public_key(&self) -> Result<PublicKey, Error> {
 		if let Some("ban_") = self.0.get(..4) {
 			if self.0.len() == 64 {
 				let mut encoded_addr = String::from(self.0.get(4..56).unwrap());
@@ -16,13 +16,13 @@ impl Address {
 				let pkey_bytes = super::BAN_ENCODING.decode(encoded_addr.as_bytes())?;
 				let derived_checksum = super::BAN_ENCODING.encode(&super::compute_address_checksum(&pkey_bytes[3..]));
 				if checksum != derived_checksum {
-					return Err(BananoError::InvalidAddress);
+					return Err(Error::InvalidAddress);
 				}
 				return Ok(PublicKey::from_bytes(&pkey_bytes[3..])?)
 			}
-			return Err(BananoError::InvalidAddressLength(self.0.len()));
+			return Err(Error::InvalidAddressLength(self.0.len()));
 		}
-        Err(BananoError::InvalidAddress)
+        Err(Error::InvalidAddress)
 	}
 }
 
