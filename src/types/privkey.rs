@@ -37,3 +37,9 @@ impl DerefMut for PrivateKey {
 		&mut self.0
 	}
 }
+
+impl From<PrivateKey> for [u8; 32] {
+	fn from(key: PrivateKey) ->  Self {
+		key.0.to_bytes()
+	}
+}
