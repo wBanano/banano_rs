@@ -36,8 +36,6 @@ pub(crate) fn compute_address_checksum(key_bytes: &[u8]) -> [u8; 5] {
 #[cfg(test)]
 mod tests {
     use data_encoding::HEXLOWER_PERMISSIVE;
-    // use hex_literal::hex;
-    // use ed25519_dalek::PublicKey;
     use super::*;
 
     #[test]

@@ -7,12 +7,6 @@ use std::ops::{Deref, DerefMut};
 pub struct Seed(pub [u8; 32]);
 
 impl Seed {
-    /*
-    pub fn from_string(seed: &str) -> Result<Self, BananoError> {
-        Seed::from(seed.as_bytes())
-    }
-    */
-
 	pub fn from<T: AsRef<[u8]>>(seed: T) -> Result<Self, Error> {
 		let seed = seed.as_ref();
 		if seed.len() != 64 {
