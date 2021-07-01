@@ -1,5 +1,6 @@
 use crate::Error;
-use ed25519_dalek::{PublicKey};
+use super::pubkey::PublicKey;
+use std::convert::TryInto;
 
 /// Address
 #[derive(Debug, Clone, PartialEq)]
@@ -18,7 +19,7 @@ impl Address {
 				if checksum != derived_checksum {
 					return Err(Error::InvalidAddress);
 				}
-				return Ok(PublicKey::from_bytes(&pkey_bytes[3..])?)
+				return Ok(super::pubkey::PublicKey(pkey_bytes[3..].try_into().expect("Not enough bytes for key")))
 			}
 			return Err(Error::InvalidAddressLength(self.0.len()));
 		}
@@ -28,10 +29,11 @@ impl Address {
 
 impl From<PublicKey> for Address {
 	fn from(key: PublicKey) -> Self {
-		let mut p_key = key.to_bytes().to_vec();
+		let b_key: [u8; 32] = key.into();
+		let mut p_key = b_key.to_vec();
 		let mut h = [0u8; 3].to_vec();
 		h.append(&mut p_key);
-		let checksum = super::BAN_ENCODING.encode(&super::compute_address_checksum(key.as_bytes()));
+		let checksum = super::BAN_ENCODING.encode(&super::compute_address_checksum(&b_key));
 		let address = {
 			let encoded_addr = super::BAN_ENCODING.encode(&h);
 			let mut addr = String::from("ban_");

@@ -1,8 +1,6 @@
 use super::Address;
 use super::PrivateKey;
-use ed25519_dalek::{
-    PublicKey,
-};
+use super::PublicKey;
 
 /// Banano account, made of a [PublicKey](PublicKey) and an [Address](Address)
 #[derive(Debug, Clone)]

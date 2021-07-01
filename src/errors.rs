@@ -11,7 +11,7 @@ pub enum Error {
     #[error("Decoding error")]
     DecodeError(#[from] data_encoding::DecodeError),
     #[error("PublicKey error")]
-    PublicKeyError(#[from] ed25519_dalek::ed25519::Error),
+    PublicKeyError(),
     #[error("Invalid Address")]
     InvalidAddress,
     #[error("Invalid Address length")]

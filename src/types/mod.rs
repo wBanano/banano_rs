@@ -9,6 +9,7 @@ use blake2::{
 pub use self::seed::Seed;
 pub use self::address::Address;
 pub use self::privkey::PrivateKey;
+pub use self::pubkey::PublicKey;
 pub use self::account::Account;
 
 mod seed;
@@ -39,7 +40,6 @@ mod tests {
     // use ed25519_dalek::PublicKey;
     use super::*;
 
-	/*
     #[test]
 	fn can_generate_address_from_seed() {
 		let seed = Seed::from("1234567890123456789012345678901234567890123456789012345678901234").unwrap();
@@ -60,13 +60,12 @@ mod tests {
 			assert_eq!(account.address.0, address)
 		})
 	}
-	*/
 
     #[test]
 	fn can_convert_address_to_public_key() {
 		let addr = Address("ban_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3".into());
 		let public_key = addr.to_public_key().unwrap();
-		let p_key_str = HEXLOWER_PERMISSIVE.encode(public_key.as_bytes());
+		let p_key_str = HEXLOWER_PERMISSIVE.encode(&public_key.0[..]);
 		// shamelessly copied from https://github.com/frankh/nano/blob/078a99b8e75bd239e13565312e06258164a781d5/address/address_test.go#L28-L30
 		assert_eq!(p_key_str, "e89208dd038fbb269987689621d52292ae9c35941a7484756ecced92a65093ba")
 	}

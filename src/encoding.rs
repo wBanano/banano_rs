@@ -210,7 +210,6 @@ macro_rules! hexify {
             where
                 D: serde::Deserializer<'de>,
             {
-                use ::std::str::FromStr;
                 let s: String = serde::Deserialize::deserialize(deserializer)?;
                 Ok(Self::from_str(&s).map_err(serde::de::Error::custom)?)
             }
@@ -220,10 +219,6 @@ macro_rules! hexify {
 
 #[cfg(test)]
 mod tests {
-    use std::str::FromStr;
-
-    use crate::types::Address;
-
     use super::*;
 
     #[test]
