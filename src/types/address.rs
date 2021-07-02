@@ -1,13 +1,14 @@
 use crate::Error;
 use super::pubkey::PublicKey;
-use std::convert::TryInto;
+use std::{convert::TryInto, ops::Deref};
+use serde::{Serialize, Deserialize};
 
 /// Address
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Address(pub String);
 
 impl Address {
-    /// Compute [PublicKey](PublicKey) from the Banano address
+    /// Compute [PublicKey] from the Banano address
     pub fn to_public_key(&self) -> Result<PublicKey, Error> {
 		if let Some("ban_") = self.0.get(..4) {
 			if self.0.len() == 64 {
@@ -43,5 +44,12 @@ impl From<PublicKey> for Address {
 		};
 
 		Address(address)
+	}
+}
+
+impl Deref for Address {
+	type Target = String;
+	fn deref(&self) -> &Self::Target {
+		&self.0
 	}
 }

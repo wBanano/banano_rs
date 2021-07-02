@@ -35,4 +35,6 @@ pub enum Error {
         msg: String,
         source: hex::FromHexError,
     },
+	#[error("Try from slice error")]
+    TryFromSliceError(#[from] std::array::TryFromSliceError),
 }

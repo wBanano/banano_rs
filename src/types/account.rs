@@ -2,7 +2,7 @@ use super::Address;
 use super::PrivateKey;
 use super::PublicKey;
 
-/// Banano account, made of a [PublicKey](PublicKey) and an [Address](Address)
+/// Banano account, made of a [PublicKey] and an [Address]
 #[derive(Debug, Clone)]
 pub struct Account {
 	pub public_key: PublicKey,

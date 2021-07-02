@@ -11,7 +11,7 @@ use std::str::FromStr;
 /// Special bounded container for the smallest unit, raw.
 ///
 /// Can not contain values outside of `0` to [u128::MAX]. To get around this, use [UnboundedRaw] or
-/// one of the other denominations: [Nano], [Mnano].
+/// one of the other denominations: [Banano], [Bananoshi].
 ///
 /// ```
 /// use banano_rs::Raw;

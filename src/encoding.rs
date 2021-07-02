@@ -116,14 +116,44 @@ pub fn decode_banano_base_32(s: &str) -> Result<BitVec<Msb0, u8>, Error> {
 /// * `TryFrom<&[u8]>` implementation.
 /// * [FromStr] implementation, which parses hex into its type.
 /// * [Debug] implementation, which displays as StructName(H3XSTR1NG), e.g. Work(A1B2C3).
-/// * [Display] implementation, which displays the hex string.
-/// * [UpperHex] and [LowerHex] implementations.
+/// * [std::fmt::Display] implementation, which displays the hex string.
+/// * [std::fmt::UpperHex] and [std::fmt::LowerHex] implementations.
 ///
 /// Display implementation is not implemented for any user customization.
 #[macro_export]
 macro_rules! hexify {
-    ($struct:ident, $description:expr) => {
+    ($struct:ident, $length: expr, $description:expr, $example_hash:expr) => {
+		doc_comment::doc_comment! {
+        concat!($description, ", with a length of ", stringify!($length), " bytes
+# Example:
+```
+use banano_rs::types::", stringify!($struct), ";
+use std::str::FromStr; // don't forget `FromStr`!
+# use std::error::Error;
+
+# fn main() -> Result<(), Box<dyn Error>> {
+", stringify!($struct), "::from_str(", stringify!($example_hash), ")?;
+#  Ok(())
+# }
+```
+		"),
+		#[derive(Clone, PartialEq, Eq, Hash)]
+		pub struct $struct([u8; $struct::LEN]);
+		}
+
         impl $struct {
+			doc_comment::doc_comment! {
+			concat!("Length of the hash (", stringify!($length), " bytes)"),
+			pub const LEN: usize = $length;
+			}
+
+			doc_comment::doc_comment! {
+			concat!("Create a new [", stringify!($struct), "] made of ", stringify!($length), " bytes each having `0` value"),
+			pub fn zero() -> Self {
+				Self([0u8; $struct::LEN])
+			}
+			}
+
             pub fn as_bytes(&self) -> &[u8] {
                 &self.0
             }

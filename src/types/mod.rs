@@ -7,12 +7,14 @@ use blake2::{
     digest::{Update, VariableOutput},
 };
 pub use self::seed::Seed;
+pub use self::block::BlockHash;
 pub use self::address::Address;
 pub use self::privkey::PrivateKey;
 pub use self::pubkey::PublicKey;
 pub use self::account::Account;
 
 mod seed;
+mod block;
 mod address;
 mod privkey;
 mod pubkey;
@@ -100,5 +102,5 @@ mod tests {
 
 		assert_eq!(output, vec![true, true, true, true, true])
 	}
-    
+
 }
