@@ -4,7 +4,7 @@ use std::ops::{Deref, DerefMut};
 
 /// Banano Seed
 #[derive(Clone)]
-pub struct Seed(pub [u8; 32]);
+pub struct Seed(pub(crate) [u8; 32]);
 
 impl Seed {
 	pub fn from<T: AsRef<[u8]>>(seed: T) -> Result<Self, Error> {
