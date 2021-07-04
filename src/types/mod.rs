@@ -55,7 +55,8 @@ mod tests {
 
 		expected_output.into_iter().enumerate().for_each(|(index, address)| {
 			let priv_key = PrivateKey::from_seed(seed.clone(), index as u32);
-			let account: Account = priv_key.into();
+			let public_key : PublicKey = priv_key.into();
+			let account: Account = public_key.into();
 
 			assert_eq!(account.address.0, address)
 		})

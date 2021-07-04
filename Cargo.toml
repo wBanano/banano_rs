@@ -23,7 +23,7 @@ blake2 = "0.9.1"
 byteorder = "1.4.3"
 data-encoding = "2.3.2"
 data-encoding-macro = "0.1.12"
-ed25519-dalek = "1.0.1"
+ed25519-dalek = { version = "1.0.1", package = "ed25519-dalek-blake2-feeless" }
 curve25519-dalek = "1.2.1"
 chrono = "0.4"
 strum = "0.21.0"

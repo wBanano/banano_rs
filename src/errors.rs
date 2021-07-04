@@ -37,4 +37,6 @@ pub enum Error {
     },
 	#[error("Try from slice error")]
     TryFromSliceError(#[from] std::array::TryFromSliceError),
+	#[error("Signature does not match.")]
+	SignatureError(),
 }
